@@ -1,8 +1,8 @@
 import {
     FETCH_ALBUM_SUCCESS,
     FETCH_ALBUMS_SUCCESS, FETCH_ARTIST_SUCCESS,
-    FETCH_ARTISTS_SUCCESS,
-    FETCH_TRACKS_SUCCESS} from "../actions/musicActions";
+    FETCH_POSTS_SUCCESS,
+    FETCH_TRACKS_SUCCESS} from "../actions/postActions";
 
 const initialState = {
     artists: null,
@@ -12,9 +12,9 @@ const initialState = {
     tracks: null,
 };
 
-const musicReducer = (state = initialState, action) => {
+const postReducer = (state = initialState, action) => {
     switch (action.type) {
-        case FETCH_ARTISTS_SUCCESS:
+        case FETCH_POSTS_SUCCESS:
             return {...state, artists: action.artists};
 
         case FETCH_ARTIST_SUCCESS:
@@ -34,4 +34,4 @@ const musicReducer = (state = initialState, action) => {
     }
 };
 
-export default musicReducer;
+export default postReducer;

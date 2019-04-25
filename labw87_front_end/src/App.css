@@ -7,55 +7,90 @@
 .h2 {
   display: grid;
   justify-self: center;
-}
-
-.column {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  padding: 10px;
-  grid-column-gap: 10px;
-}
-
-.one_artist {
-  display: grid;
-  grid-column: 1 / 4;
-  text-align: center;
-}
-
-.artist_p,
-.album_p {
-  grid-column: 1 / 4;
-  justify-self: center;
-}
-
-.track_thumbnail {
-  grid-column: 2 / 4;
-  justify-self: center;
+  margin-top: 0;
 }
 
 .img_thumbnail {
-    width: 200px;
-    height: 200px;
+  display: grid;
+  grid-row: 1 / 3;
+    width: 100px;
+    height: 100px;
 }
 
 .main_nav {
   display: grid;
+  grid-template-columns: repeat(3, auto);
+  background: azure;
+  padding: 20px;
+}
+
+.user_menu,
+.anonymous_menu {
+  display: grid;
   grid-template-columns: auto auto;
 }
 
-.add_album {
-  display: grid;
-  justify-self: right;
-}
-
-.form_div {
-  display: grid;
-  grid-template-columns: auto;
-  width: 70%;
+.menu_li {
+  display: inline;
+  margin-left: 50px;
 }
 
 .form {
   display: grid;
+  grid-template-columns: auto;
   grid-row-gap: 10px;
-  padding: 10px;
+}
+
+.element {
+  display: grid;
+  grid-template-columns: auto;
+}
+
+.login_div,
+.register_div,
+.comment_form,
+.comments_list_div {
+  display: grid;
+  justify-self: center;
+  background: azure;
+  padding: 30px;
+  margin-top: 20px;
+}
+
+.comment_form {
+  width: 50%;
+}
+
+.comments_list_div {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+}
+
+.comments_list_p {
+  grid-column: 1 / 3;
+}
+
+.main_register_div,
+.main_login_div,
+.main_comment_div,
+.comment_form_div {
+  display: grid;
+}
+
+.input {
+  border-radius: 5px;
+}
+
+.post_thumbnail {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: auto auto;
+  background: azure;
+  margin-top: 20px;
+  padding: 20px;
+}
+
+.post_text_div {
+  grid-column: 2 / 4;
 }
