@@ -7,10 +7,11 @@ import {
 
 const initialState = {
     registerError: null,
-    user: null
+    user: null,
+    loginError: null
 };
 
-const usersReduser = (state = initialState, action) => {
+const usersReducer = (state = initialState, action) => {
     switch (action.type) {
 
         case REGISTER_USER_SUCCESS:
@@ -36,4 +37,4 @@ const usersReduser = (state = initialState, action) => {
     }
 };
 
-export default usersReduser;
+export default usersReducer;

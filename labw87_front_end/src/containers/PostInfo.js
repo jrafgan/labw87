@@ -1,15 +1,18 @@
 import React, {Component} from 'react';
-import {Link, NavLink} from "react-router-dom";
-//import {getAlbums, getArtist} from "../store/actions/postActions";
 import connect from "react-redux/es/connect/connect";
 import ImgThumbnail from "../components/UI/ImgThumbnail";
-import FormElement from "../components/UI/FormElement";
+import {createComment, getCommentsByPost} from "../store/actions/postActions";
 
 class PostInfo extends Component {
 
     state = {
-      comment: '',
+        comment: '',
     };
+
+    componentDidMount() {
+        const id = this.props.match.params.id;
+        this.props.getComments(id);
+    }
 
     inputChangeHandler = e => {
         this.setState({
@@ -19,8 +22,9 @@ class PostInfo extends Component {
 
     submitFormHandler = e => {
         e.preventDefault();
-        //this.props.loginUser({...this.state});
-        console.log('this is comment submit')
+        console.log('this is comment submit');
+        this.props.createComment({...this.state, post: this.props.comments[0].post._id});
+
     };
 
     getFieldError = fieldName => {
@@ -28,58 +32,59 @@ class PostInfo extends Component {
     };
 
     render() {
-
         return (
             <div>
-                <div className="post_thumbnail">
-                    <ImgThumbnail image={this.props}/>
+                {this.props.comments ? <div className="post_thumbnail">
+                    <ImgThumbnail image={this.props.comments[0].post.image}/>
                     <div>
-                        Time
+                        {this.props.comments[0].post.datetime}
                     </div>
                     <div>
-                        Author
+                        {this.props.comments[0].user.username}
                     </div>
                     <div className="post_text_div">
-                        Title
+                        {this.props.comments[0].post.title}
                     </div>
                     <div className="post_text_div">
-                        Description
+                        {this.props.comments[0].post.description}
                     </div>
-                </div>
+                </div> : null}
                 <div>
                     <p>Comments</p>
-                    <div className="comments_list_div">
-                        <span>This is time</span>
-                        <span>This is author</span>
-                        <p className="comments_list_p">This is comments text</p>
-                    </div>
-                    <div className="comment_form_div">
-                        <form  onSubmit={this.submitFormHandler} className="comment_form">
-                            <label htmlFor="description">Comment</label>
-                            <textarea
-                                className="textarea"
-                                id="comment"
-                                name="comment"
-                                value={this.state.comment}
-                                onChange={this.inputChangeHandler}
-                                style={this.props.error ? {"background": "red"} : null} />
-                            <button type="submit">Comment</button>
-                        </form>
-                    </div>
+                    {this.props.comments ? this.props.comments.map(item => <div className="comments_list_div"
+                                                                                key={item._id}>
+                        <span>{new Date(item.datetime).toLocaleString()}</span>
+                        <span>{item.user.username}</span>
+                        <p className="comments_list_p">{item.comment}</p>
+                    </div>) : null}
                 </div>
+                {this.props.user ? <div className="comment_form_div">
+                    <form onSubmit={this.submitFormHandler} className="comment_form">
+                        <label htmlFor="description">Comment</label>
+                        <textarea
+                            className="textarea"
+                            id="comment"
+                            name="comment"
+                            value={this.state.comment}
+                            onChange={this.inputChangeHandler}
+                            style={this.props.error ? {"background": "red"} : null}/>
+                        <button type="submit">Comment</button>
+                    </form>
+                </div> : null}
             </div>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    // artist: state.response.artist,
-    // albums: state.response.albums,
+    post: state.posts.post,
+    comments: state.posts.comments,
+    user: state.users.user
 });
 
 const mapDispatchToProps = dispatch => ({
-    // getArtist: (id) => dispatch(getArtist(id)),
-    // getAlbums: (artistId) => dispatch(getAlbums(artistId)),
+    getComments: postId => dispatch(getCommentsByPost(postId)),
+    createComment: commentData => dispatch(createComment(commentData)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostInfo);

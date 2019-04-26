@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import '../App.css'
-import {getAlbums, getPosts, getTracks} from "../store/actions/postActions";
+import {getPosts} from "../store/actions/postActions";
 import connect from "react-redux/es/connect/connect";
 import ImgThumbnail from "../components/UI/ImgThumbnail";
-import {Link, NavLink} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 
 class Main extends Component {
 
-    // componentDidMount() {
-    //     this.props.getArtists();
-    // }
+    componentDidMount() {
+        this.props.getPosts();
+    }
 
     getAlbums = e => {
       console.log(e.target);
@@ -35,32 +35,28 @@ class Main extends Component {
     render() {
         return (
             <div className="App">
-                <div className="post_thumbnail">
-                    <ImgThumbnail image={this.props}/>
+                {this.props.posts ? this.props.posts.map(item=><div className="post_thumbnail" key={item._id}>
+                    <ImgThumbnail image={item.image}/>
                     <div>
-                        Time
+                        {new Date(item.datetime).toLocaleString()}
                     </div>
                     <div>
-                        Author
+                        {item.user.username}
                     </div>
-                    <div className="post_text_div"><NavLink to="/post_info">Post Title</NavLink></div>
-                </div>
+                    <div className="post_text_div"><NavLink to={"/post_info/" + item._id} id={item._id}>{item.title}</NavLink></div>
+                </div>) : null}
             </div>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    // artists: state.response.artists,
-    // albums: state.response.albums,
-    // tracks: state.response.tracks,
-    // state: state.response
+    posts: state.posts.posts,
+    user: state.users.user,
 });
 
 const mapDispatchToProps = dispatch => ({
-    // getArtists: () => dispatch(getPosts()),
-    // getAlbums: () => dispatch(getAlbums()),
-    // getTracks: () => dispatch(getTracks()),
+    getPosts: () => dispatch(getPosts()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

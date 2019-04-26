@@ -1,20 +1,14 @@
 import axios from '../../axios-api';
+import {push} from "connected-react-router";
 
 export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
-export const FETCH_ARTIST_SUCCESS = 'FETCH_ARTIST_SUCCESS';
-export const FETCH_ALBUMS_SUCCESS = 'FETCH_ALBUMS_SUCCESS';
-export const FETCH_ALBUM_SUCCESS = 'FETCH_ALBUM_SUCCESS';
-export const FETCH_TRACKS_SUCCESS = 'FETCH_TRACKS_SUCCESS';
-export const FETCH_TRACKSBYARTIST_SUCCESS = 'FETCH_TRACKSBYARTIST_SUCCESS';
-export const FETCH_TRACKSBYALBUM_SUCCESS = 'FETCH_TRACKSBYALBUM_SUCCESS';
+export const FETCH_POST_SUCCESS = 'FETCH_POST_SUCCESS';
+export const FETCH_COMMENTS_SUCCESS = 'FETCH_COMMENTS_SUCCESS';
+
 
 export const fetchPostsSuccess = posts => ({type: FETCH_POSTS_SUCCESS, posts});
-export const fetchArtistSuccess = artist => ({type: FETCH_ARTIST_SUCCESS, artist});
-export const fetchAlbumsSuccess = albums => ({type: FETCH_ALBUMS_SUCCESS, albums});
-export const fetchAlbumSuccess = album => ({type: FETCH_ALBUM_SUCCESS, album});
-export const fetchTracksSuccess = tracks => ({type: FETCH_TRACKS_SUCCESS, tracks});
-export const fetchTracksByArtistSuccess = tracks => ({type: FETCH_TRACKSBYARTIST_SUCCESS, tracks});
-export const fetchTracksByAlbumSuccess = tracks => ({type: FETCH_TRACKSBYALBUM_SUCCESS, tracks});
+export const fetchPostSuccess = post => ({type: FETCH_POST_SUCCESS, post});
+export const fetchCommentsSuccess = comments => ({type: FETCH_COMMENTS_SUCCESS, comments});
 
 export const getPosts = () => {
     return dispatch => {
@@ -25,64 +19,44 @@ export const getPosts = () => {
     };
 };
 
-// export const getAlbums = (artistId) => {
-//     return dispatch => {
-//         return axios.get('/albums?artist=' + artistId).then(
-//             response => {
-//                 dispatch(fetchAlbumsSuccess(response.data));
-//                 console.log(response.data);
-//             });
-//     };
-// };
-//
-// export const getAlbum = (id) => {
-//     return dispatch => {
-//         return axios.get('/albums/' + id).then(
-//             response => {
-//                 dispatch(fetchAlbumSuccess(response.data));
-//                 console.log(response.data);
-//             });
-//     };
-// };
-//
-// export const getTracks = () => {
-//     return dispatch => {
-//         return axios.get('/tracks').then(
-//             response => {
-//                 dispatch(fetchTracksSuccess(response.data));
-//             });
-//     };
-// };
-//
-// export const getTracksByArtist = artistId => {
-//     return dispatch => {
-//         return axios.get('/tracks?artist='+artistId).then(
-//             response => {
-//                 dispatch(fetchTracksByArtistSuccess(response.data));
-//             });
-//     };
-// };
-//
-// export const getTracksByAlbum = (albumId) => {
-//     return dispatch => {
-//         return axios.get('/tracks?album='+albumId).then(
-//             response => {
-//                 dispatch(fetchTracksSuccess(response.data));
-//                 console.log(response.data)
-//             });
-//     };
-// };
-//
-// export const createArtist = artistData => {
-//     return dispatch => {
-//         return axios.post('/artists', artistData).then(
-//             response => {
-//             });
-//     };
-// };
-//
-// export const createAlbum = albumData => {
-//     return dispatch => {
-//         return axios.post('/albums', albumData);
-//     };
-// };
+export const getPost = postId => {
+    return dispatch => {
+        return axios.get('/posts?id=' + postId).then(
+            response => {
+                dispatch(fetchPostSuccess(response.data));
+            });
+    };
+};
+
+export const getCommentsByPost = (postId) => {
+    return dispatch => {
+        return axios.get('/comments?id=' + postId).then(
+            response => {
+                dispatch(fetchCommentsSuccess(response.data));
+
+            });
+    };
+};
+
+export const createPost = postData => {
+    return (dispatch, getState) => {
+        const token = getState().users.user.token;
+        const config = {headers: {'Authorization': token}};
+        return axios.post('/posts/', postData, config).then(
+            response => {
+                dispatch(push('/'));
+
+            });
+    };
+};
+
+export const createComment = commentData => {
+    return (dispatch, getState) => {
+        const token = getState().users.user.token;
+        const config = {headers: {'Authorization': token}};
+        return axios.post('/comments', commentData, config).then(
+            response => {
+                dispatch(push('/'));
+            });
+    };
+};

@@ -6,7 +6,7 @@ const UserMenu = ({user, logout}) => {
     return (
         <div className="user_menu">
             <div>
-                Привет, {user}!
+                Привет, {user.username}!
             </div>
             <div className="user_menu">
                 <NavLink to="/add_post" exact>Добавить пост</NavLink>

@@ -5,7 +5,9 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
     const user = new User(req.body);
+
     user.generateToken();
+    console.log('this is user', user);
 
     try {
         await user.save();
@@ -25,31 +27,38 @@ router.post('/sessions', async (req, res) => {
     const isMatch = await user.checkPassword(req.body.password);
 
     if (!isMatch) {
-        return res.status(400).send({error: 'Username/Password incorrect'});
+        return res.status(400).send({error: 'Password incorrect'});
     }
 
     user.generateToken();
+
     await user.save();
 
     res.send({message: 'Login successful ', user});
 });
 
-router.put('/', async (req, res) => {
+
+router.delete('/sessions', async (req, res) => {
     const token = req.get('Authorization');
-
+    const success = {message: 'Logged out'};
     if (!token) {
-        return res.status(401).send({error: 'Authorization headers not present'});
+        return res.send(success);
     }
-
     const user = await User.findOne({token});
-
     if (!user) {
-        return res.status(401).send({error: 'Token incorrect'});
+        return res.send(success)
     }
-
-    user.password = req.body.password;
-
+    user.generateToken();
     await user.save();
+    return res.send(success);
+});
+
+router.put('/', auth, async (req, res) => {
+
+
+    req.user.password = req.body.password;
+
+    await req.user.save();
 
     res.sendStatus(200);
 });

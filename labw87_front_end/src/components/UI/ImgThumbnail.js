@@ -4,9 +4,9 @@ import {apiURL} from "../../constants";
 
 const ImgThumbnail = props => {
     let image = imageNotAvailable;
-    // if (props.image) {
-    //     image = apiURL + '/uploads/' + props.image;
-    // }
+    if (props.image) {
+        image = apiURL + '/uploads/' + props.image;
+    }
 
     return <img src={image} className='img_thumbnail' alt='Artist' />
 };

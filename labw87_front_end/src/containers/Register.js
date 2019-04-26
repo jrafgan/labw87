@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import {registerUser} from "../store/actions/usersActions";
 import {connect} from 'react-redux';
 import FormElement from "../components/UI/FormElement";

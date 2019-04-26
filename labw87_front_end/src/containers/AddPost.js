@@ -1,7 +1,7 @@
-import React, {Fragment, Component} from 'react';
+import React, {Component} from 'react';
 import FormElement from "../components/UI/FormElement";
-import {loginUser} from "../store/actions/usersActions";
 import {connect} from "react-redux";
+import {createPost} from "../store/actions/postActions";
 
 class NewPost extends Component {
 
@@ -19,7 +19,16 @@ class NewPost extends Component {
 
     submitFormHandler = e => {
         e.preventDefault();
-        this.props.loginUser({...this.state});
+
+        const formData = new FormData();
+
+        Object.keys(this.state).forEach(key => {
+            if (this.state[key] !== null) {
+                formData.append(key, this.state[key]);
+            }
+        });
+
+        this.props.onSubmit(formData);
     };
 
     getFieldError = fieldName => {
@@ -83,7 +92,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    loginUser: userData => dispatch(loginUser(userData))
+    onSubmit: formData => dispatch(createPost(formData))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewPost);

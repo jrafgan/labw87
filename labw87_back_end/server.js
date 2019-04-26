@@ -2,15 +2,12 @@ const express = require('express');
 const config = require('./config');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const artists = require('./app/artists');
-const albums = require('./app/albums');
-const tracks = require('./app/tracks');
+const comments = require('./app/comments');
 const users = require('./app/users');
-const history = require('./app/trackHistory');
+const posts = require('./app/posts');
 
 const app = express();
 
-mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
@@ -21,11 +18,9 @@ app.use(express.static('public'));
 const port = 8003;
 
 mongoose.connect(config.dbUrl, config.mongoOptions).then(() => {
-  app.use('/artists', artists);
-  app.use('/albums', albums);
-  app.use('/tracks', tracks);
+  app.use('/posts', posts);
+  app.use('/comments', comments);
   app.use('/users', users);
-  app.use('/tracks_history', history);
 
   app.listen(port, () => {
     console.log(`Server started on ${port} port`);

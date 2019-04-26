@@ -15,12 +15,28 @@ const registerUserFailure = error => ({type: REGISTER_USER_FAILURE, error});
 const loginUserSuccess = user => ({type: LOGIN_USER_SUCCESS, user});
 const loginUserFailure = error => ({type: LOGIN_USER_FAILURE, error});
 
-export const logoutUser = () => ({type: LOGOUT_USER});
+export const logoutUser = () => {
+    console.log('this is logout ');
+    return (dispatch, getState) => {
+        const token = getState().users.user.token;
+        const config = {headers: {'Authorization': token}};
+        return axios.delete('/users/sessions', config).then(() => {dispatch({type: LOGOUT_USER});
+            },
+            error => {
+                if (error.response) {
+                    dispatch(registerUserFailure(error.response.data));
+                } else {
+                    dispatch(registerUserFailure({global: "No network connection "}))
+                }
+            }
+        )
+    }
+};
 
 export const registerUser = userData => {
     return dispatch => {
-        return axios.post('/users', userData).then(() => {
-                dispatch(registerUserSuccess());
+        return axios.post('/users', userData).then(response => {
+                dispatch(registerUserSuccess(response.data.user));
                 dispatch(push('/'));
             },
             error => {

@@ -7,17 +7,18 @@ import Layout from "./components/Layout";
 import Register from "./containers/Register";
 import Login from "./containers/Login";
 import {connect} from "react-redux";
+import {logoutUser} from "./store/actions/usersActions";
 
 
 class App extends Component {
     render() {
         return (
             <Fragment>
-                <Layout user={this.props.user}/>
+                <Layout user={this.props.user} logout={this.props.logoutUser}/>
                     <Switch>
                         <Route path="/" exact component={Main} />
                         <Route path="/add_post" exact component={NewPost} />
-                        <Route path="/post_info" exact component={PostInfo} />
+                        <Route path="/post_info/:id" exact component={PostInfo} />
                         <Route path="/register" exact component={Register} />
                         <Route path="/login" exact component={Login} />
                     </Switch>
@@ -27,11 +28,11 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-    user: null,
+    user: state.users.user,
 });
 
 const mapDispatchToProps = dispatch => ({
-    //logoutUser: () => dispatch(logoutUser())
+    logoutUser: () => dispatch(logoutUser())
 });
 
-export default withRouter(connect(mapStateToProps)(App));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
